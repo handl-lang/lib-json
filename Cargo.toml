@@ -1,0 +1,22 @@
+[package]
+name = "handl-lib-json"
+version = "0.1.0"
+edition = "2024"
+description = "json: JSON codec + functions for the serialize trait (ADR-0128 split)."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/handl-lang/lib-json"
+
+[dependencies]
+handl-platform = { git = "https://github.com/handl-lang/platform", branch = "main" }
+handl-plugin-lib-handl = { git = "https://github.com/handl-lang/platform", branch = "main" }
+handl-value = { git = "https://github.com/handl-lang/platform", branch = "main" }
+handl-lib-serialize = { git = "https://github.com/handl-lang/lib-serialize", branch = "main" }
+serde_json = "1"
+
+[patch."https://github.com/handl-lang/platform"]
+handl-platform = { path = "../platform/crates/platform" }
+handl-plugin-lib-handl = { path = "../platform/crates/plugin-lib-handl" }
+handl-value = { path = "../platform/crates/handl-value" }
+
+[patch."https://github.com/handl-lang/lib-serialize"]
+handl-lib-serialize = { path = "../lib-serialize" }
