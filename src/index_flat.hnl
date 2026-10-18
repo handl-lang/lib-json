@@ -1,0 +1,206 @@
+ws_p := (c) ~> str.find(" \t\n\r", c) >= 0
+num_p := (c) ~> str.find("0123456789+-.eE", c) >= 0
+alpha_p := (c) ~> str.find("abcdefghijklmnopqrstuvwxyz", c) >= 0
+slen := (xs) ~> while { xs: xs, n: 0 } {
+  (xs, n) ~> match xs {
+    []: { out: n },
+    [_, ...t]: { state: { xs: t, n: n + 1 } }
+  }
+}
+take := (xs, n) ~> while { xs: xs, n: n, acc: [] } {
+  (xs, n, acc) ~> match xs {
+    []: { out: acc },
+    [x, ...t]: if n > 0 {
+      { state: { xs: t, n: n - 1, acc: [...acc, x] } }
+    } else { { out: acc } }
+  }
+}
+drop := (xs, n) ~> while { xs: xs, n: n } {
+  (xs, n) ~> match xs {
+    []: { out: [] },
+    [_, ...t]: if n > 0 {
+      { state: { xs: t, n: n - 1 } }
+    } else { { out: xs } }
+  }
+}
+esc := (s) ~> while { cs: char.chars(s), acc: "" } {
+  (cs, acc) ~> match cs {
+    []: { out: acc },
+    [c, ...t]: if c == "\"" {
+      { state: { cs: t, acc: acc + "\\\"" } }
+    } else { if c == "\\" {
+      { state: { cs: t, acc: acc + "\\\\" } }
+    } else {
+      { state: { cs: t, acc: acc + c } }
+    } }
+  }
+}
+
+--- `json.stringify` — pure-Handl JSON serializer (iterative worklist).
+
+p_at := (p, i) ~> match p {
+  [a, b]: if i == 0 { a } else { b }
+}
+
+items_actions := (xs) ~> while { xs: xs, acc: [], i: 0 } {
+  (xs, acc, i) ~> match xs {
+    []: { out: acc },
+    [x, ...t]: if i == 0 {
+      { state: { xs: t, acc: [...acc, { k: "v", x: x }], i: i + 1 } }
+    } else {
+      { state: { xs: t, acc: [...acc, { k: "s", s: "," }, { k: "v", x: x }], i: i + 1 } }
+    }
+  }
+}
+
+obj_actions := (pairs) ~> while { ps: pairs, acc: [], i: 0 } {
+  (ps, acc, i) ~> match ps {
+    []: { out: acc },
+    [p, ...t]: do {
+      key_act := { k: "s", s: "\"" + esc(p_at(p, 0)) + "\":" }
+      if i == 0 {
+        { state: { ps: t, acc: [...acc, key_act, { k: "v", x: p_at(p, 1) }], i: i + 1 } }
+      } else {
+        { state: { ps: t, acc: [...acc, { k: "s", s: "," }, key_act, { k: "v", x: p_at(p, 1) }], i: i + 1 } }
+      }
+    }
+  }
+}
+
+step_v := (v, rest, out) ~> do {
+  if v == null { { state: { stack: rest, out: out + "null" } } } else {
+  if typeof.is(v, typeof.str()) { { state: { stack: rest, out: out + "\"" + esc(v) + "\"" } } } else {
+  if typeof.is(v, typeof.bool()) { { state: { stack: rest, out: out + typeof.to_string(v) } } } else {
+  if typeof.is(v, typeof.num()) { { state: { stack: rest, out: out + typeof.to_string(v) } } } else {
+  if typeof.is(v, typeof.arr()) {
+    { state: { stack: [...items_actions(v), { k: "s", s: "]" }, ...rest], out: out + "[" } }
+  } else {
+    { state: { stack: [...obj_actions(obj.entries(v)), { k: "s", s: "}" }, ...rest], out: out + "{" } }
+  } } } } }
+}
+
+export stringify := (v) ~> while { stack: [{ k: "v", x: v }], out: "" } {
+  (stack, out) ~> match stack {
+    []: { out: out },
+    [a, ...rest]: if a.k == "s" {
+      { state: { stack: rest, out: out + a.s } }
+    } else {
+      step_v(a.x, rest, out)
+    }
+  }
+}
+
+--- `json.parse` — pure-Handl JSON parser (tokenize + stack build).
+
+-- scan a `"`terminated string starting after cs's head; returns {rest, s}
+scan_str := (cs, acc) ~> match cs {
+  []: { out: { rest: [], s: acc } },
+  ["\\", c, ...t]: { state: { cs: t, acc: acc + c } },
+  ["\"", ...t]: { out: { rest: t, s: acc } },
+  [c, ...t]: { state: { cs: t, acc: acc + c } }
+}
+
+scan_run := (cs, pred, acc) ~> match cs {
+  []: { out: { rest: [], s: acc } },
+  [c, ...t]: if pred(c) {
+    { state: { cs: t, acc: acc + c } }
+  } else { { out: { rest: cs, s: acc } } }
+}
+
+tok_step := (cs, acc) ~> match cs {
+  [c, ...t]: if c == "\"" {
+    do {
+      r := while { cs: t, acc: "" } { (cs, acc) ~> scan_str(cs, acc) }
+      { state: { cs: r.rest, acc: [...acc, { k: "v", v: r.s }] } }
+    }
+  } else {
+    if num_p(c) {
+      do {
+        r := while { cs: cs, acc: "" } { (cs, acc) ~> scan_run(cs, num_p, acc) }
+        { state: { cs: r.rest, acc: [...acc, { k: "v", v: typeof.to_number(r.s) }] } }
+      }
+    } else {
+      if alpha_p(c) {
+        do {
+          r := while { cs: cs, acc: "" } { (cs, acc) ~> scan_run(cs, alpha_p, acc) }
+          v := if r.s == "true" { true } else {
+            if r.s == "false" { false } else { null }
+          }
+          { state: { cs: r.rest, acc: [...acc, { k: "v", v: v }] } }
+        }
+      } else {
+        if c == ":" || c == "," {
+          { state: { cs: t, acc: acc } }
+        } else {
+          { state: { cs: t, acc: [...acc, { k: c, v: null }] } }
+        }
+      }
+    }
+  }
+}
+
+tokenize := (s) ~> while { cs: char.chars(s), acc: [] } {
+  (cs, acc) ~> match cs {
+    []: { out: acc },
+    [c, ...t]: if ws_p(c) {
+      { state: { cs: t, acc: acc } }
+    } else { tok_step(cs, acc) }
+  }
+}
+
+-- place a completed value v into the frame stack
+place := (v, stack) ~> match stack {
+  []: { stack: stack, val: v },
+  [f, ...rest]: if f.k == "a" {
+    { stack: [{ k: "a", items: [...f.items, v], key: null }, ...rest], val: null }
+  } else {
+    if f.key == null {
+      { stack: [{ k: "o", items: f.items, key: v }, ...rest], val: null }
+    } else {
+      { stack: [{ k: "o", items: [...f.items, [f.key, v]], key: null }, ...rest], val: null }
+    }
+  }
+}
+
+finish := (f) ~> if f.k == "a" { f.items } else { obj.from_entries(f.items) }
+
+build_step := (tk, stack) ~> do {
+  if tk.k == "v" { place(tk.v, stack) } else {
+  if tk.k == "{" {
+    { stack: [{ k: "o", items: [], key: null }, ...stack], val: null }
+  } else {
+  if tk.k == "[" {
+    { stack: [{ k: "a", items: [], key: null }, ...stack], val: null }
+  } else {
+    -- close "}" or "]"
+    do {
+      f := match stack { [h, ...rr]: h }
+      rest := match stack { [h, ...rr]: rr }
+      place(finish(f), rest)
+    }
+  } } }
+}
+
+export parse := (s) ~> while { ts: tokenize(s), stack: [], val: null } {
+  (ts, stack, val) ~> match ts {
+    []: { out: val },
+    [tk, ...rest]: do {
+      r := build_step(tk, stack)
+      { state: { ts: rest, stack: r.stack, val: r.val } }
+    }
+  }
+}
+
+--- json.stringify -- serialize a Value to JSON text.
+--- json.parse -- parse JSON text into a Value.
+--- json.json -- return the json codec token.
+cap "json.stringify"
+cap "json.parse"
+cap "json.json"
+op "json.stringify" : Value -> String
+  guarantee: True
+op "json.parse" : String -> Value
+  guarantee: True
+op "json.json" : () -> Value
+  guarantee: True
+

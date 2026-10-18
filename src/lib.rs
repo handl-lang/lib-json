@@ -19,3 +19,6 @@ pub const JSON_SOURCES: &[(&str, &str, &[&str])] = &[
 
 /// The `json` package index — aggregator `.hnl` re-exporting the arrows.
 pub const JSON_HNL: &str = include_str!("index.hnl");
+
+/// Flattened single-source `.hnl` (for `stdlib::MODULES` table rows).
+pub const JSON_FLAT_HNL: &str = include_str!("index_flat.hnl");
