@@ -1,0 +1,15 @@
+--- json.stringify -- serialize a Value to JSON text.
+--- json.parse -- parse JSON text into a Value.
+--- json.json -- return the json codec token.
+cap "json.stringify"
+cap "json.parse"
+cap "json.json"
+op "json.stringify" : Value -> String
+  guarantee: True
+op "json.parse" : String -> Value
+  guarantee: True
+op "json.json" : () -> Value
+  guarantee: True
+
+from "./stringify.hnl" export stringify
+from "./parse.hnl" export parse

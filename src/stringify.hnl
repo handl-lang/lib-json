@@ -1,0 +1,54 @@
+--- `json.stringify` — pure-Handl JSON serializer (iterative worklist).
+from "./internal/helpers.hnl" import esc
+
+p_at := (p, i) ~> match p {
+  [a, b]: if i == 0 { a } else { b }
+}
+
+items_actions := (xs) ~> while { xs: xs, acc: [], i: 0 } {
+  (xs, acc, i) ~> match xs {
+    []: { out: acc },
+    [x, ...t]: if i == 0 {
+      { state: { xs: t, acc: [...acc, { k: "v", x: x }], i: i + 1 } }
+    } else {
+      { state: { xs: t, acc: [...acc, { k: "s", s: "," }, { k: "v", x: x }], i: i + 1 } }
+    }
+  }
+}
+
+obj_actions := (pairs) ~> while { ps: pairs, acc: [], i: 0 } {
+  (ps, acc, i) ~> match ps {
+    []: { out: acc },
+    [p, ...t]: do {
+      key_act := { k: "s", s: "\"" + esc(p_at(p, 0)) + "\":" }
+      if i == 0 {
+        { state: { ps: t, acc: [...acc, key_act, { k: "v", x: p_at(p, 1) }], i: i + 1 } }
+      } else {
+        { state: { ps: t, acc: [...acc, { k: "s", s: "," }, key_act, { k: "v", x: p_at(p, 1) }], i: i + 1 } }
+      }
+    }
+  }
+}
+
+step_v := (v, rest, out) ~> do {
+  if v == null { { state: { stack: rest, out: out + "null" } } } else {
+  if typeof.is(v, typeof.str()) { { state: { stack: rest, out: out + "\"" + esc(v) + "\"" } } } else {
+  if typeof.is(v, typeof.bool()) { { state: { stack: rest, out: out + typeof.to_string(v) } } } else {
+  if typeof.is(v, typeof.num()) { { state: { stack: rest, out: out + typeof.to_string(v) } } } else {
+  if typeof.is(v, typeof.arr()) {
+    { state: { stack: [...items_actions(v), { k: "s", s: "]" }, ...rest], out: out + "[" } }
+  } else {
+    { state: { stack: [...obj_actions(obj.entries(v)), { k: "s", s: "}" }, ...rest], out: out + "{" } }
+  } } } } }
+}
+
+export stringify := (v) ~> while { stack: [{ k: "v", x: v }], out: "" } {
+  (stack, out) ~> match stack {
+    []: { out: out },
+    [a, ...rest]: if a.k == "s" {
+      { state: { stack: rest, out: out + a.s } }
+    } else {
+      step_v(a.x, rest, out)
+    }
+  }
+}

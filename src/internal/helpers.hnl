@@ -1,0 +1,37 @@
+export ws_p := (c) ~> str.find(" \t\n\r", c) >= 0
+export num_p := (c) ~> str.find("0123456789+-.eE", c) >= 0
+export alpha_p := (c) ~> str.find("abcdefghijklmnopqrstuvwxyz", c) >= 0
+export slen := (xs) ~> while { xs: xs, n: 0 } {
+  (xs, n) ~> match xs {
+    []: { out: n },
+    [_, ...t]: { state: { xs: t, n: n + 1 } }
+  }
+}
+export take := (xs, n) ~> while { xs: xs, n: n, acc: [] } {
+  (xs, n, acc) ~> match xs {
+    []: { out: acc },
+    [x, ...t]: if n > 0 {
+      { state: { xs: t, n: n - 1, acc: [...acc, x] } }
+    } else { { out: acc } }
+  }
+}
+export drop := (xs, n) ~> while { xs: xs, n: n } {
+  (xs, n) ~> match xs {
+    []: { out: [] },
+    [_, ...t]: if n > 0 {
+      { state: { xs: t, n: n - 1 } }
+    } else { { out: xs } }
+  }
+}
+export esc := (s) ~> while { cs: char.chars(s), acc: "" } {
+  (cs, acc) ~> match cs {
+    []: { out: acc },
+    [c, ...t]: if c == "\"" {
+      { state: { cs: t, acc: acc + "\\\"" } }
+    } else { if c == "\\" {
+      { state: { cs: t, acc: acc + "\\\\" } }
+    } else {
+      { state: { cs: t, acc: acc + c } }
+    } }
+  }
+}

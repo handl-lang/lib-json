@@ -1,0 +1,14 @@
+from "./index" import * as m
+test_s_null := assert m.stringify(null) = "null"
+test_s_num := assert m.stringify(42) = "42"
+test_s_bool := assert m.stringify(true) = "true"
+test_s_str := assert m.stringify("hi") = "\"hi\""
+test_s_arr := assert m.stringify([1, 2]) = "[1,2]"
+test_s_obj := assert m.stringify({ a: 1 }) = "{\"a\":1}"
+test_p_num := assert m.parse("42") = 42
+test_p_str := assert m.parse("\"hi\"") = "hi"
+test_p_arr := assert m.parse("[1,2]") = [1, 2]
+test_p_obj := assert m.parse("{\"a\":1}") = { a: 1 }
+test_p_bool := assert m.parse("true") = true
+test_p_nest := assert m.parse("{\"a\":[1,{\"b\":null}]}") = { a: [1, { b: null }] }
+test_rt := assert m.parse(m.stringify({ a: [1, 2], b: { c: "x" } })) = { a: [1, 2], b: { c: "x" } }
