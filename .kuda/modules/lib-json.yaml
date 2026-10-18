@@ -1,0 +1,186 @@
+name: lib-json
+path: src/ops.rs
+purpose: lib-json
+api:
+- name: JSON_OPS
+  kind: const
+  file: src/ops.rs
+  line: 13
+  module: lib-json
+- name: Json
+  kind: type
+  file: src/ops.rs
+  line: 21
+  module: lib-json
+- name: JsonEncoder
+  kind: type
+  file: src/ops.rs
+  line: 25
+  module: lib-json
+- name: JsonDecoder
+  kind: type
+  file: src/ops.rs
+  line: 29
+  module: lib-json
+- name: Output
+  kind: type
+  file: src/ops.rs
+  line: 32
+  module: lib-json
+- name: encode
+  kind: function
+  file: src/ops.rs
+  line: 34
+  module: lib-json
+- name: decode
+  kind: function
+  file: src/ops.rs
+  line: 40
+  module: lib-json
+- name: serialize
+  kind: function
+  file: src/ops.rs
+  line: 46
+  module: lib-json
+- name: deserialize
+  kind: function
+  file: src/ops.rs
+  line: 50
+  module: lib-json
+- name: Output
+  kind: type
+  file: src/ops.rs
+  line: 56
+  module: lib-json
+- name: encode
+  kind: function
+  file: src/ops.rs
+  line: 58
+  module: lib-json
+- name: decode
+  kind: function
+  file: src/ops.rs
+  line: 64
+  module: lib-json
+- name: JsonParse
+  kind: type
+  file: src/ops.rs
+  line: 78
+  module: lib-json
+- name: call
+  kind: function
+  file: src/ops.rs
+  line: 81
+  module: lib-json
+- name: JsonStringify
+  kind: type
+  file: src/ops.rs
+  line: 108
+  module: lib-json
+- name: call
+  kind: function
+  file: src/ops.rs
+  line: 111
+  module: lib-json
+- name: json_op_registry
+  kind: function
+  file: src/ops.rs
+  line: 140
+  module: lib-json
+- name: JsonName
+  kind: type
+  file: src/ops.rs
+  line: 149
+  module: lib-json
+- name: call
+  kind: function
+  file: src/ops.rs
+  line: 152
+  module: lib-json
+- name: register
+  kind: function
+  file: src/ops.rs
+  line: 172
+  module: lib-json
+- name: ops
+  kind: module
+  file: src/lib.rs
+  line: 7
+  module: lib-json
+deps:
+- handl_platform
+- handl_plugin_lib_handl
+- handl_lib_serialize
+- serde_json
+- ops
+notes: ''
+verify:
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/ops.rs
+- src/lib.rs
+provenance:
+  files:
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/ops.rs
+  - src/lib.rs
+  hashes:
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 686203237a510d7a380d79acc40ebf171e29ded8
+  - 7049ce11e12f83c79273a06eaac29127be8295f4
+  commit_sha: 5cc8eca540955e26482d42fcd3d74449d48010c3
+  generated_at: '1792281226'
+  generator: kuda-template/0.1.0

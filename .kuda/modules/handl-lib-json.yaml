@@ -1,0 +1,26 @@
+name: handl-lib-json
+path: Cargo.toml
+purpose: 'json: JSON codec + functions for the serialize trait (ADR-0128 split).'
+api:
+- name: handl-lib-json
+  kind: module
+  file: Cargo.toml
+  line: 1
+  module: handl-lib-json
+deps:
+- handl-lib-serialize
+- handl-platform
+- handl-plugin-lib-handl
+- handl-value
+- serde_json
+notes: ''
+verify:
+- Cargo.toml
+provenance:
+  files:
+  - Cargo.toml
+  hashes:
+  - 353c9339090ba368815126a2093e4c9f06c59fca
+  commit_sha: 5cc8eca540955e26482d42fcd3d74449d48010c3
+  generated_at: '1792281226'
+  generator: kuda-template/0.1.0
