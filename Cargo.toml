@@ -7,11 +7,6 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/handl-lang/lib-json"
 
 [dependencies]
-handl-platform = { git = "https://github.com/handl-lang/platform", branch = "main" }
-handl-plugin-lib-handl = { git = "https://github.com/handl-lang/platform", branch = "main" }
-handl-value = { git = "https://github.com/handl-lang/kernel", branch = "main" }
-handl-lib-serialize = { git = "https://github.com/handl-lang/lib-serialize", branch = "main" }
-serde_json = "1"
 
 [patch."https://github.com/handl-lang/kernel"]
 handl-value = { path = "../kernel/crates/handl-value" }

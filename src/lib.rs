@@ -1,24 +1,19 @@
-//! `json` — the JSON codec (`Encoder`/`Decoder`/`Serializer`) plus the
-//! `json.parse` / `json.stringify` functions.
-//!
-//! Rule B: the codec lives here, not in `lib-serialize`; that crate stays
-//! contract-only and the stdlib/kit row composes the two.
+//! `json` — the JSON codec: pure `.hnl` `parse`/`stringify` (stack-machine
+//! tokenizer + worklist serializer) over `str`/`char`/`math`/`obj`/`typeof`.
+//! This crate is a data carrier — the impls live in `src/*.hnl`.
 
-pub mod ops;
+/// The handl source declaring the `json` interface.
+pub const JSON_HNL: &str = include_str!("index.hnl");
 
-pub use ops::{json_op_registry, register, Json, JSON_OPS};
+/// Exported `.hnl` arrows.
+pub const JSON_FUNCS: &[&str] = &["stringify", "parse"];
 
-/// `.hnl` package source set — index + sibling files (wired into kits via
-/// `handl_module_from_sources`).
-pub const JSON_FUNCS: &[&str] = &["stringify","parse"];
+/// `.hnl` package source set.
 pub const JSON_SOURCES: &[(&str, &str, &[&str])] = &[
-    ("helpers", include_str!("internal/helpers.hnl"), &["ws_p","num_p","alpha_p","slen","take","drop","esc"]),
+    ("helpers", include_str!("internal/helpers.hnl"), &[]),
     ("stringify", include_str!("stringify.hnl"), &["stringify"]),
     ("parse", include_str!("parse.hnl"), &["parse"]),
 ];
-
-/// The `json` package index — aggregator `.hnl` re-exporting the arrows.
-pub const JSON_HNL: &str = include_str!("index.hnl");
 
 /// Flattened single-source `.hnl` (for `stdlib::MODULES` table rows).
 pub const JSON_FLAT_HNL: &str = include_str!("index_flat.hnl");
