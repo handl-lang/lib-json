@@ -6,7 +6,7 @@
 pub const JSON_HNL: &str = include_str!("index.hnl");
 
 /// Exported `.hnl` arrows.
-pub const JSON_FUNCS: &[&str] = &["stringify", "parse"];
+pub const JSON_FUNCS: &[&str] = &["stringify", "parse", "json"];
 
 /// `.hnl` package source set.
 pub const JSON_SOURCES: &[(&str, &str, &[&str])] = &[

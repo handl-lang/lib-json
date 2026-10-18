@@ -79,7 +79,7 @@ step_v := (v, rest, out) ~> do {
   } } } } }
 }
 
-export stringify := (v) ~> while { stack: [{ k: "v", x: v }], out: "" } {
+stringify_impl := (v) ~> while { stack: [{ k: "v", x: v }], out: "" } {
   (stack, out) ~> match stack {
     []: { out: out },
     [a, ...rest]: if a.k == "s" {
@@ -181,7 +181,7 @@ build_step := (tk, stack) ~> do {
   } } }
 }
 
-export parse := (s) ~> while { ts: tokenize(s), stack: [], val: null } {
+parse_impl := (s) ~> while { ts: tokenize(s), stack: [], val: null } {
   (ts, stack, val) ~> match ts {
     []: { out: val },
     [tk, ...rest]: do {
@@ -204,3 +204,7 @@ op "json.parse" : String -> Value
 op "json.json" : () -> Value
   guarantee: True
 
+
+export stringify := stringify_impl
+export parse := parse_impl
+export json := () ~> ({ "type": "codec", "name": "json", "encode": stringify_impl, "decode": parse_impl })
