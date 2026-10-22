@@ -1,3 +1,6 @@
+from "str" import * as str
+from "char" import * as char
+
 export ws_p := (c) ~> str.find(" \t\n\r", c) >= 0
 export num_p := (c) ~> str.find("0123456789+-.eE", c) >= 0
 export alpha_p := (c) ~> str.find("abcdefghijklmnopqrstuvwxyz", c) >= 0

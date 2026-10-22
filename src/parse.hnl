@@ -1,4 +1,7 @@
 --- `json.parse` — pure-Handl JSON parser (tokenize + stack build).
+from "char" import * as char
+from "typeof" import * as typeof
+from "obj" import * as obj
 from "./internal/helpers.hnl" import ws_p
 from "./internal/helpers.hnl" import num_p
 from "./internal/helpers.hnl" import alpha_p

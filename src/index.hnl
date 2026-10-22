@@ -14,4 +14,4 @@ op "json.json" : () -> Value
 from "./stringify.hnl" export stringify
 from "./parse.hnl" export parse
 
-export json := () ~> ({ "type": "codec", "name": "json", "encode": stringify_impl, "decode": parse_impl })
+export json := () ~> ({ "type": "codec", "name": "json", "encode": stringify, "decode": parse })

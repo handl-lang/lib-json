@@ -10,7 +10,11 @@ pub const JSON_FUNCS: &[&str] = &["stringify", "parse", "json"];
 
 /// `.hnl` package source set.
 pub const JSON_SOURCES: &[(&str, &str, &[&str])] = &[
-    ("helpers", include_str!("internal/helpers.hnl"), &[]),
+    (
+        "helpers",
+        include_str!("internal/helpers.hnl"),
+        &["ws_p", "num_p", "alpha_p", "slen", "take", "drop", "esc"],
+    ),
     ("stringify", include_str!("stringify.hnl"), &["stringify"]),
     ("parse", include_str!("parse.hnl"), &["parse"]),
 ];

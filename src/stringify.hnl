@@ -1,4 +1,6 @@
 --- `json.stringify` — pure-Handl JSON serializer (iterative worklist).
+from "typeof" import * as typeof
+from "obj" import * as obj
 from "./internal/helpers.hnl" import esc
 
 p_at := (p, i) ~> match p {
