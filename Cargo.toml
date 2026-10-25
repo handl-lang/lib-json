@@ -8,12 +8,3 @@ repository = "https://github.com/handl-lang/lib-json"
 
 [dependencies]
 
-[patch."https://github.com/handl-lang/kernel"]
-handl-value = { path = "../kernel/crates/handl-value" }
-
-[patch."https://github.com/handl-lang/lib-serialize"]
-handl-lib-serialize = { path = "../lib-serialize" }
-
-[patch."https://github.com/handl-lang/host"]
-handl-platform = { path = "../host/crates/platform" }
-handl-plugin-lib-handl = { path = "../host/crates/plugin-lib-handl" }
