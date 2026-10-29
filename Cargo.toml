@@ -1,0 +1,10 @@
+[package]
+name = "handl-lib-json"
+version = "0.1.0"
+edition = "2024"
+description = "json: JSON codec + functions for the serialize trait (ADR-0128 split)."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/handl-lang/lib-json"
+
+[dependencies]
+
