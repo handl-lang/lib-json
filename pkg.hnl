@@ -1,0 +1,2 @@
+-- lib-json: package manifest (ADR-0160).
+{ modules: ["json"] }
