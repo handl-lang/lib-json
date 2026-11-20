@@ -1,2 +1,2 @@
 -- lib-json: package manifest (ADR-0160).
-{ modules: ["json"] }
+{ modules: ["json"], description: "JSON codec plus json.parse / json.stringify.", license: "MIT" }
