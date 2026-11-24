@@ -4,11 +4,11 @@
 cap "json.stringify"
 cap "json.parse"
 cap "json.json"
-op "json.stringify" : Value -> String
+op "json.stringify" : Value ~> String
   guarantee: True
-op "json.parse" : String -> Value
+op "json.parse" : String ~> Value
   guarantee: True
-op "json.json" : () -> Value
+op "json.json" : () ~> Value
   guarantee: True
 
 from "./stringify.hnl" export stringify
