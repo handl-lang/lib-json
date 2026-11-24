@@ -1,21 +1,14 @@
 name: lib-json
 root: /home/luis/GitHub/handl-lang/lib-json
-purpose: ''
-modules:
-- handl-lib-json
-- lib-json
-commands:
-- cargo check
-- cargo test --workspace
+purpose: JSON codec plus the json.parse / json.stringify functions, implementing
+modules: []
+commands: []
+tree_digest: da39a3ee5e6b4b0d3255bfef95601890afd80709
 provenance:
   files:
-  - Cargo.toml
-  - src/ops.rs
-  - src/lib.rs
+  - README.md
   hashes:
-  - 353c9339090ba368815126a2093e4c9f06c59fca
-  - 686203237a510d7a380d79acc40ebf171e29ded8
-  - 7049ce11e12f83c79273a06eaac29127be8295f4
-  commit_sha: 5cc8eca540955e26482d42fcd3d74449d48010c3
-  generated_at: '1792281226'
+  - 1d9eb5bc481cab535075ef7b711ad54bfe8a2b22
+  commit_sha: 95ffb033cde24574360fe7e67b62dc332fb7600f
+  generated_at: '1795484421'
   generator: kuda/0.1.0
